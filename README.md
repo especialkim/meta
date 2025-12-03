@@ -50,6 +50,8 @@ cd my-project
 ```
 /
 ├── CLAUDE.md              # AI 진입점 (트리거 + 자동 생성 인덱스)
+├── AGENT.md              # AI 진입점 (트리거 + 자동 생성 인덱스)
+├── GEMINI.md              # AI 진입점 (트리거 + 자동 생성 인덱스)
 ├── _meta/
 │   ├── GUIDE.md           # 작업 규칙 상세
 │   ├── plan.md            # 프로젝트 방향, 로드맵
