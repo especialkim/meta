@@ -4,28 +4,42 @@ AI 협업을 위한 프로젝트 메타 정보 관리 템플릿.
 
 ## 사용법
 
-### 1. 템플릿 clone
+### 방법 1: workspace 명령어 (권장)
 
+글로벌 명령어로 등록하면 어디서든 사용 가능.
+
+**설치:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/_meta-template.git my-project
-cd my-project
+# 스크립트 복사
+cp _meta/server/workspace.sh ~/bin/workspace
+chmod +x ~/bin/workspace
+
+# PATH 추가 (~/.zshrc 또는 ~/.bashrc)
+export PATH="$HOME/bin:$PATH"
 ```
 
-### 2. 초기화 및 실행
+**사용:**
+```bash
+# 새 프로젝트 생성
+workspace my-project
+
+# 새 프로젝트 + origin 설정
+workspace my-project https://github.com/user/my-project.git
+
+# 기존 프로젝트에 _meta 추가
+cd existing-project
+workspace
+```
+
+### 방법 2: 수동 clone + setup
 
 ```bash
+git clone https://github.com/especialkim/meta.git my-project
+cd my-project
 ./setup-and-run.sh https://github.com/YOUR_USERNAME/my-project.git
 ```
 
-이 스크립트는:
-- 템플릿 git history 제거 후 새로 초기화
-- `_meta/` 내용 정리
-- 의존성 설치
-- `meta-run.sh` 생성
-- 자기 자신 삭제
-- Meta Server 실행
-
-### 3. 이후 실행
+### 이후 실행
 
 ```bash
 ./meta-run.sh

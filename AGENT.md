@@ -7,7 +7,7 @@
   - ## Specs Index, ## Stages Index, ## Decisions Index 헤딩을 --- 위에 사용하지 마세요.
 -->
 
-# CLAUDE.md
+# AGENT.md
 
 ## 메타 작업 트리거
 

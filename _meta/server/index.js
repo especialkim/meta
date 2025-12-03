@@ -19,18 +19,21 @@ const TARGET_FILES = [
   'GEMINI.md',
 ];
 
-// h2, h3 헤딩 추출
-function extractHeadings(filePath, maxLevel = 2) {
+// h1, h2, h3 헤딩 추출
+function extractHeadings(filePath, maxLevel = 3) {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     const headings = [];
 
     for (const line of lines) {
+      const h1Match = line.match(/^# (.+)$/);
       const h2Match = line.match(/^## (.+)$/);
       const h3Match = line.match(/^### (.+)$/);
 
-      if (h2Match) {
+      if (h1Match) {
+        headings.push({ level: 1, text: h1Match[1].trim() });
+      } else if (h2Match && maxLevel >= 2) {
         headings.push({ level: 2, text: h2Match[1].trim() });
       } else if (h3Match && maxLevel >= 3) {
         headings.push({ level: 3, text: h3Match[1].trim() });
@@ -55,7 +58,7 @@ function getMdFiles(dir) {
   }
 }
 
-// Specs Index 생성 (h3까지 TOC)
+// Specs Index 생성 (h1~h3 TOC)
 function buildSpecsIndex() {
   const files = getMdFiles(SPECS_DIR);
   if (files.length === 0) return '';
@@ -68,14 +71,14 @@ function buildSpecsIndex() {
 
     index += `- [${name}](./_meta/specs/${file})\n`;
     for (const h of headings) {
-      const indent = h.level === 2 ? '  ' : '    ';
+      const indent = h.level === 1 ? '  ' : h.level === 2 ? '    ' : '      ';
       index += `${indent}- ${h.text}\n`;
     }
   }
   return index;
 }
 
-// Stages Index 생성 (h2까지 TOC)
+// Stages Index 생성 (h1~h3 TOC)
 function buildStagesIndex() {
   const files = getMdFiles(STAGES_DIR);
   if (files.length === 0) return '';
@@ -84,11 +87,12 @@ function buildStagesIndex() {
   for (const file of files) {
     const name = file.replace('.md', '');
     const filePath = path.join(STAGES_DIR, file);
-    const headings = extractHeadings(filePath, 2);
+    const headings = extractHeadings(filePath, 3);
 
     index += `- [${name}](./_meta/stages/${file})\n`;
     for (const h of headings) {
-      index += `  - ${h.text}\n`;
+      const indent = h.level === 1 ? '  ' : h.level === 2 ? '    ' : '      ';
+      index += `${indent}- ${h.text}\n`;
     }
   }
   return index;
