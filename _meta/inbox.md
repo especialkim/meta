@@ -16,7 +16,7 @@
    - 첫 번째 depth: Task `- [ ]` 사용
    - 두 번째 depth 이후: `-` 만 사용해서 보조 설명 추가
 3. 각 항목의 성격에 따라 적절한 문서에 반영:
-   - 프로젝트 전체 지침 → `/CLAUDE.md`
+   - 프로젝트 전체 지침 → `/CLAUDE.md` `/AGENT.md` `/GEMINI.md` 동일하게
    - 프로젝트 방향/로드맵 → `plan.md`
    - 확정된 규칙/스펙 → `specs/주제.md`
    - 결정 히스토리 → `decisions/YYMMDD-주제.md`
