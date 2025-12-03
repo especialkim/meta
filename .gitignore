@@ -1,3 +1,7 @@
+# Cursor
+.specstory/
+.cursorindexingignore
+
 # Meta server
 _meta/server/node_modules/
 
