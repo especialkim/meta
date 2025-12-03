@@ -12,3 +12,8 @@ meta-run.sh
 .vscode/
 *.swp
 *.swo
+
+# AGENT Instruction
+CLAUDE.md
+GEMINI.md
+AGENT.md
