@@ -1,0 +1,13 @@
+{
+  "name": "meta-server",
+  "version": "1.0.0",
+  "description": "AI 협업을 위한 메타 인덱스 자동 업데이트 서버",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node index.js --watch"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3"
+  }
+}

@@ -1,0 +1,14 @@
+# Meta server
+_meta/server/node_modules/
+
+# Generated scripts (local only)
+meta-run.sh
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
