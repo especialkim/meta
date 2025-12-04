@@ -11,6 +11,8 @@ const ROOT_DIR = path.resolve(META_DIR, '..');
 const SPECS_DIR = path.join(META_DIR, 'specs');
 const STAGES_DIR = path.join(META_DIR, 'stages');
 const DECISIONS_DIR = path.join(META_DIR, 'decisions');
+const TROUBLESHOOTING_DIR = path.join(META_DIR, 'troubleshooting');
+const EXPLAINERS_DIR = path.join(META_DIR, 'explainers');
 
 // 인덱스를 업데이트할 대상 파일들 (루트 기준)
 const TARGET_FILES = [
@@ -111,6 +113,32 @@ function buildDecisionsIndex() {
   return index;
 }
 
+// Troubleshooting Index 생성 (파일명만)
+function buildTroubleshootingIndex() {
+  const files = getMdFiles(TROUBLESHOOTING_DIR);
+  if (files.length === 0) return '';
+
+  let index = '## Troubleshooting Index\n\n';
+  for (const file of files) {
+    const name = file.replace('.md', '');
+    index += `- [${name}](./_meta/troubleshooting/${file})\n`;
+  }
+  return index;
+}
+
+// Explainers Index 생성 (파일명만)
+function buildExplainersIndex() {
+  const files = getMdFiles(EXPLAINERS_DIR);
+  if (files.length === 0) return '';
+
+  let index = '## Explainers Index\n\n';
+  for (const file of files) {
+    const name = file.replace('.md', '');
+    index += `- [${name}](./_meta/explainers/${file})\n`;
+  }
+  return index;
+}
+
 // 단일 파일 인덱스 업데이트
 function updateTargetFile(filePath) {
   try {
@@ -126,10 +154,12 @@ function updateTargetFile(filePath) {
       content = content.substring(0, sepIndex + separator.length);
     }
 
-    // 순서: Specs → Stages → Decisions
+    // 순서: Specs → Stages → Decisions → Troubleshooting → Explainers
     const specsIndex = buildSpecsIndex();
     const stagesIndex = buildStagesIndex();
     const decisionsIndex = buildDecisionsIndex();
+    const troubleshootingIndex = buildTroubleshootingIndex();
+    const explainersIndex = buildExplainersIndex();
 
     let newContent = content + '\n';
     if (specsIndex) {
@@ -139,7 +169,13 @@ function updateTargetFile(filePath) {
       newContent += stagesIndex + '\n';
     }
     if (decisionsIndex) {
-      newContent += decisionsIndex;
+      newContent += decisionsIndex + '\n';
+    }
+    if (troubleshootingIndex) {
+      newContent += troubleshootingIndex + '\n';
+    }
+    if (explainersIndex) {
+      newContent += explainersIndex;
     }
 
     fs.writeFileSync(filePath, newContent.trimEnd() + '\n');
@@ -174,13 +210,13 @@ function updateAllTargets() {
 
 // 초기 실행
 console.log('Meta Server 시작...');
-console.log(`감시 대상: specs/, stages/, decisions/`);
+console.log(`감시 대상: specs/, stages/, decisions/, troubleshooting/, explainers/`);
 console.log(`인덱스 대상: ${TARGET_FILES.join(', ')}`);
 updateAllTargets();
 
 // Watch 모드
 if (process.argv.includes('--watch')) {
-  const watcher = chokidar.watch([SPECS_DIR, STAGES_DIR, DECISIONS_DIR], {
+  const watcher = chokidar.watch([SPECS_DIR, STAGES_DIR, DECISIONS_DIR, TROUBLESHOOTING_DIR, EXPLAINERS_DIR], {
     ignored: /(^|[\/\\])\../,
     persistent: true,
     ignoreInitial: true
