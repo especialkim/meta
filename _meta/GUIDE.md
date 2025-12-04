@@ -50,6 +50,8 @@ AI 협업 시 참고해야 할 작업 규칙과 가이드.
 | `decisions/` | 결정 히스토리 (왜 이렇게 결정했는가) |
 | `stages/` | 각 stage별 세부 계획 |
 | `devlog/` | 일일 개발 로그 (`__template__.md` 참고) |
+| `explainers/` | 개념/기술 설명 (친근하고 쉽게, 중학생도 이해 가능) |
+| `troubleshooting/` | 트러블슈팅 기록 (재발 방지, 간결하게) |
 
 ---
 
@@ -67,6 +69,7 @@ AI 협업 시 참고해야 할 작업 규칙과 가이드.
 - 확정된 규칙/스펙을 기록하는 곳
 - 파일명: 주제 기반 (예: `architecture.md`, `code-convention.md`, `design-tokens.md`)
 - `## 헤딩`, `### 헤딩`은 CLAUDE.md 인덱스에 TOC로 노출됨
+- 각 섹션에 관련 주요 파일/폴더를 함께 명기해 추적성을 확보
 
 ### decisions/ 작성
 
@@ -85,6 +88,7 @@ AI 협업 시 참고해야 할 작업 규칙과 가이드.
   ## 대안 검토 (선택)
   고려했지만 선택하지 않은 옵션들
   ```
+- 각 결정마다 영향을 받는 주요 파일/폴더를 함께 명기
 
 ### stages/ 작성
 
@@ -96,18 +100,19 @@ AI 협업 시 참고해야 할 작업 규칙과 가이드.
 ### devlog/ 작성
 
 - 파일명: `YYMMDD.md` (예: `241203.md`)
-- 구조:
-  ```
-  ## 해결되지 않은 문제
-  - 문제:
-  - 예상 원인:
-  - 시도해본 것:
-  - 다음에 시도할 것:
+- `devlog/__template__.md` 참고하여 작성
 
-  ## 오늘 한 일
-  - [ ] stage1.1 - 작업 내용
-  - [x] stage1.2 - 완료된 작업
-  ```
+### explainers/ 작성
+
+- 파일명: `YYMMDD_주제.md` (예: `241204_React_Hooks.md`)
+- 톤: 친근하고 쉽게, 중학생도 이해 가능하게
+- `explainers/__template__.md` 참고하여 작성
+
+### troubleshooting/ 작성
+
+- 파일명: `YYMMDD_문제키워드.md` (예: `241204_빌드_에러.md`)
+- 톤: 간결하게, 핵심만 (재발 방지 목적)
+- `troubleshooting/__template__.md` 참고하여 작성
 
 ---
 
@@ -119,3 +124,5 @@ AI 협업 시 참고해야 할 작업 규칙과 가이드.
 | decisions | `YYMMDD-주제.md` | `241203-routing.md` |
 | stages | `stageN_제목.md` | `stage1_초기설정.md` |
 | devlog | `YYMMDD.md` | `241203.md` |
+| explainers | `YYMMDD_주제.md` | `241204_React_Hooks.md` |
+| troubleshooting | `YYMMDD_문제키워드.md` | `241204_빌드_에러.md` |

@@ -1,6 +1,10 @@
+**No prompts, No Instructions, just talk.**
+
 # _meta Template
 
 AI와 함께 작업할 때 프로젝트 정보를 체계적으로 관리하는 템플릿입니다.
+
+CLAUDE.md 같은 파일을 직접 수정할 필요 없이, AI와 대화하면서 "결정사항으로 남겨", "트러블슈팅 기록해" 같은 말만 하면 됩니다. AI가 알아서 문서를 만들고, watcher가 인덱스를 자동 업데이트합니다.
 
 ## 빠른 시작
 
@@ -75,6 +79,8 @@ cd my-project
 │   ├── decisions/         # 결정 기록
 │   ├── stages/            # 단계별 상세 계획
 │   ├── devlog/            # 개발 일지
+│   ├── troubleshooting/   # 문제 해결 기록
+│   ├── explainers/        # 개념 설명 문서
 │   └── server/            # 인덱스 자동 생성 서버
 ├── setup-and-run.sh       # 초기화용 (1회만 실행)
 └── meta-run.sh            # 서버 실행용 (초기화 후 생성)
@@ -90,6 +96,8 @@ cd my-project
 | "플랜 업데이트" | plan.md 수정 |
 | "지금 어디야?" | 현재 진행 상황 확인 |
 | "어디까지 했지?" | 최근 작업 내용 요약 |
+| "트러블슈팅 기록 남겨" | troubleshooting/에 문제 해결 과정 저장 |
+| "[주제] 설명 문서 만들어줘" | explainers/에 개념 설명 문서 생성 |
 
 ## Meta Server
 
@@ -101,3 +109,7 @@ cd _meta/server
 npm run watch   # 파일 변경 감지 모드
 npm start       # 한 번만 실행
 ```
+
+---
+
+**No prompts, No Instructions, just talk.**

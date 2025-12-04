@@ -19,6 +19,8 @@
 | "플랜 업데이트" | `_meta/plan.md` | 계획 수정 |
 | "지금 어디야?" | `_meta/plan.md` | 현재 stage 상태 확인 |
 | "어디까지 했지?" | `_meta/devlog/` | 최신 devlog 2-3개 + `plan.md` + 현재 stage 확인 |
+| "[주제]를 쉽게 설명하는 문서 만들어줘" | `_meta/explainers/__template__.md` | 개념/기술 설명 문서 작성 (친근하게) |
+| "트러블슈팅 기록 남겨" | `_meta/troubleshooting/__template__.md` | 문제 해결 과정 기록 (간결하게) |
 
 **흐름:** 트리거 감지 → 진입점 파일 읽기 → `_meta/GUIDE.md` 규칙대로 처리 → 결과 보고
 
