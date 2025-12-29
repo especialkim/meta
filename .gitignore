@@ -17,7 +17,3 @@ meta-run.sh
 *.swp
 *.swo
 
-# AGENT Instruction
-CLAUDE.md
-GEMINI.md
-AGENT.md

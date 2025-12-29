@@ -110,6 +110,24 @@ npm run watch   # 파일 변경 감지 모드
 npm start       # 한 번만 실행
 ```
 
+## AI 인스트럭션 파일 보호
+
+`CLAUDE.md`, `GEMINI.md`, `AGENT.md` 파일은 **로컬에서만 사용**됩니다.
+
+- ✅ AI가 이 파일들을 읽을 수 있음
+- ✅ 로컬 커밋에 포함 가능
+- ✅ `git push` 시 자동으로 필터링되어 원격에는 포함되지 않음
+
+이 동작은 `workspace` 명령어 실행 시 자동으로 설정되는 Git pre-push 훅에 의해 보장됩니다.
+
+### 훅 해제 (AI 파일도 push하고 싶은 경우)
+
+```bash
+rm .git/hooks/pre-push
+```
+
 ---
 
 **No prompts, No Instructions, just talk.**
+
+

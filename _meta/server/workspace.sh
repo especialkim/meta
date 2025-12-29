@@ -39,7 +39,7 @@ usage() {
   exit 0
 }
 
-# 공통 setup 함수 (npm install + meta-run.sh 생성 + setup-and-run.sh 삭제)
+# 공통 setup 함수 (npm install + meta-run.sh 생성 + setup-and-run.sh 삭제 + pre-push 훅 설정)
 do_setup() {
   # npm install
   info "meta server 의존성 설치..."
@@ -59,7 +59,116 @@ EOF
     rm -f setup-and-run.sh
     info "setup-and-run.sh 삭제됨"
   fi
+
+  # pre-push 훅 설정
+  setup_pre_push_hook
 }
+
+# pre-push 훅 설정 함수
+setup_pre_push_hook() {
+  local hook_file=".git/hooks/pre-push"
+  
+  # .git 폴더가 있는지 확인
+  if [ ! -d ".git" ]; then
+    warn ".git 폴더가 없어서 pre-push 훅을 설정할 수 없습니다."
+    return
+  fi
+  
+  # hooks 폴더 생성 (없으면)
+  mkdir -p .git/hooks
+  
+  info "pre-push 훅 설정..."
+  
+  cat > "$hook_file" << 'HOOK_EOF'
+#!/bin/bash
+# AI instruction 파일들을 자동으로 필터링하여 push
+# 로컬에서는 AI 파일이 유지되지만, 원격에는 push되지 않습니다.
+# git worktree를 사용하여 현재 작업 디렉토리를 건드리지 않습니다.
+
+PROTECTED_FILES=("CLAUDE.md" "GEMINI.md" "AGENT.md" "_meta")
+REMOTE="$1"
+
+while read local_ref local_sha remote_ref remote_sha; do
+  # 삭제되는 브랜치는 무시
+  if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+    continue
+  fi
+  
+  # 현재 브랜치 이름
+  branch_name=$(echo "$local_ref" | sed 's|refs/heads/||')
+  
+  # AI 파일이 커밋에 있는지 확인
+  has_protected=false
+  for file in "${PROTECTED_FILES[@]}"; do
+    if git ls-tree -r "$local_sha" --name-only 2>/dev/null | grep -q "^$file$"; then
+      has_protected=true
+      break
+    fi
+  done
+  
+  if [ "$has_protected" = true ]; then
+    echo ""
+    echo "🔄 AI 파일을 필터링하여 push 중..."
+    
+    # 임시 디렉토리 생성
+    temp_dir=$(mktemp -d)
+    temp_branch="__meta_temp_push_$$"
+    
+    # worktree 추가 (현재 디렉토리 영향 없음)
+    git worktree add -q -b "$temp_branch" "$temp_dir" "$local_sha" 2>/dev/null
+    
+    if [ $? -ne 0 ]; then
+      echo "❌ 임시 작업 공간 생성 실패"
+      rm -rf "$temp_dir"
+      exit 1
+    fi
+    
+    # 임시 디렉토리에서 AI 파일 제거
+    cd "$temp_dir"
+    
+    for file in "${PROTECTED_FILES[@]}"; do
+      if git ls-files --error-unmatch "$file" 2>/dev/null; then
+        git rm -q --cached "$file" 2>/dev/null
+      fi
+    done
+    
+    # 변경사항이 있으면 커밋 수정
+    if ! git diff --cached --quiet; then
+      git commit -q --amend --no-edit
+    fi
+    
+    # 필터링된 커밋을 원격에 push
+    git push --no-verify "$REMOTE" "HEAD:$branch_name" 2>&1
+    push_result=$?
+    
+    # 원래 디렉토리로 복귀
+    cd - > /dev/null
+    
+    # worktree 정리
+    git worktree remove -f "$temp_dir" 2>/dev/null
+    git branch -q -D "$temp_branch" 2>/dev/null
+    rm -rf "$temp_dir" 2>/dev/null
+    
+    if [ $push_result -eq 0 ]; then
+      echo "✅ Push 완료 (AI 파일 제외됨)"
+      echo "   로컬의 AI 파일은 그대로 유지됩니다."
+      echo ""
+    else
+      echo "❌ Push 실패"
+      echo ""
+    fi
+    
+    exit $push_result
+  fi
+done
+
+exit 0
+HOOK_EOF
+
+  chmod +x "$hook_file"
+  info "pre-push 훅 설정 완료"
+}
+
 
 # 빈 폴더 또는 새 프로젝트 모드
 new_project_mode() {
